@@ -84,7 +84,6 @@ def compile_to_css_and_save(input_file, dest_file):
     else:
         print(stylesheet)
 
-
 class SourceModificationEventHandler(FileSystemEventHandler):
     def __init__(self, input_file, dest_file, watched_dir):
         super(SourceModificationEventHandler, self).__init__()
@@ -117,20 +116,34 @@ class SourceModificationEventHandler(FileSystemEventHandler):
 
 
 def run():
-    parser = argparse.ArgumentParser(prog="QtSASS",
-                                     description="Compile a Qt compliant CSS file from a SASS stylesheet.",
-                                     )
-    parser.add_argument('input', type=str, help="The SASS stylesheet file.")
-    parser.add_argument('-o', '--output', type=str, help="The path of the generated Qt compliant CSS file.")
-    parser.add_argument('-w', '--watch', action='store_true', help="Whether to watch source file "
-                                                                   "and automatically recompile on file change.")
+    parser = argparse.ArgumentParser(
+                prog='QtSASS',
+                description='Compile a Qt compliant CSS file from a SASS stylesheet.'
+                )
+    parser.add_argument('input', type=str,
+                        help='The SASS stylesheet file.')
+    parser.add_argument('output', type=str, nargs='?',
+                        help='The output CSS file. Leave out to automatically '
+                             'determine the output file name, or use a dash (-) '
+                             'for standard output.')
+    parser.add_argument('-w', '--watch', action='store_true',
+                        help='Watch source file, and automatically recompile '
+                             'on modifications.')
 
     args = parser.parse_args()
-    compile_to_css_and_save(args.input, args.output)
+
+    if not args.output:
+        dest_file = os.path.splitext(args.input)[0] + '.css'
+    elif args.output == '-':
+        dest_file = None
+    else:
+        dest_file = args.output
+
+    compile_to_css_and_save(args.input, dest_file)
 
     if args.watch:
         watched_dir = os.path.abspath(os.path.dirname(args.input))
-        event_handler = SourceModificationEventHandler(args.input, args.output, watched_dir)
+        event_handler = SourceModificationEventHandler(args.input, dest_file, watched_dir)
         logging.info("qtsass is watching {}...".format(args.input))
         observer = Observer()
         observer.schedule(event_handler, watched_dir, recursive=False)
