@@ -116,7 +116,7 @@ class SourceModificationEventHandler(FileSystemEventHandler):
             self._recompile()
 
 
-if __name__ == "__main__":
+def run():
     parser = argparse.ArgumentParser(prog="QtSASS",
                                      description="Compile a Qt compliant CSS file from a SASS stylesheet.",
                                      )
@@ -141,3 +141,7 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             observer.stop()
         observer.join()
+
+
+if __name__ == '__main__':
+    run()

@@ -1,1 +1,4 @@
-__author__ = 'yann.lanthony'
+__author__ = 'yann.lanthony, Onno Broekmans'
+
+from .qtsass import *
+
