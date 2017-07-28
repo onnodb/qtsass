@@ -7,6 +7,8 @@ However, Qt's CSS has a few variations that prevent the direct use of SASS compi
 
 The purpose of this tool is to fill the gap between SASS and Qt-CSS by handling those variations.
 
+_This is a fork of the [original qtsass project on GitHub](https://github.com/spyder-ide/qtsass), by Yann Lanthony._
+
 ## Qt's CSS specificities
 
 The goal of QtSASS is to be able to generate a Qt-CSS stylesheet based on a 100% valid SASS file.
